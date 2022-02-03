@@ -70,19 +70,19 @@ int menorLista(tipoLista lista){
 tipoLista ordenar(tipoLista lista3, tipoLista listaOrganizada){
     int tam;
     tam = tamanho(lista3);
+    listaOrganizada = NULL;
     if (lista3 == NULL){
         printf("\nLista vazia\n");
-    //    return lista;
+       return lista3;
     }
     else{
         
-        //for (int i = 0; i < tam; i++){
-        //    listaOrganizada = inserirDireita(menorLista(lista), listaOrganizada);
+        for (int i = 0; i < tam; i++){
+            listaOrganizada = inserirDireita(menorLista(lista3), listaOrganizada);
             lista3 = excluirMenor(lista3);
-        //}        
+        }        
         
-        return lista3;
-        //printf("\n %d maior; %d menor \n", maiorLista(lista), menorLista(lista));
+        return listaOrganizada;
         
     }
 
@@ -358,6 +358,11 @@ tipoLista excluirMenor(tipoLista lista){
     if (lista == NULL){
         printf("Lista vazia");
     }
+    else if (lista->anterior == NULL && lista->proximo == NULL){
+        free(lista);
+        lista = NULL;
+        return lista;
+    }
     else{
 
         tipoLista listaAux = lista;
@@ -366,20 +371,46 @@ tipoLista excluirMenor(tipoLista lista){
             
             
             if (listaAux->dado == valor){
-                listaAux2 = listaAux->anterior;
-                listaAux = listaAux->proximo;
-                listaAux2->proximo = listaAux;
                 
-                return lista;
+                if (listaAux->proximo != NULL && listaAux->anterior != NULL){
+                    listaAux2 = listaAux->anterior;
+                    listaAux = listaAux->proximo;
+                    listaAux2->proximo = listaAux;
+                    listaAux->anterior = listaAux2;
+                }
+                else if (listaAux->proximo != NULL && listaAux->anterior == NULL){
+                    printf("\nRemove esquerda\n");
+                    
+                    listaAux = listaAux->proximo;
+                    listaAux->anterior = NULL;
+                    return listaAux;            
+                }
+                else if (listaAux->proximo == NULL && listaAux->anterior != NULL){
+                    printf("\nRemove direita\n");
+                    
+                    listaAux2 = listaAux;
+                    listaAux->anterior->proximo = NULL;
+                    listaAux2->anterior = NULL;
+                    free(listaAux2);
+                    listaAux2 = NULL;
 
+                    return lista;
+                    
+                }
+                
             }
             
             listaAux = listaAux->proximo;
             
         }
-
-
+        return lista;
+        free(listaAux2);
+        listaAux2 = NULL;
+        free(listaAux);
+        listaAux = NULL;
+        
     }
+  
 
 }
 
@@ -446,6 +477,7 @@ int main(){
         printf("\n 5- exibir lista \n");
         printf("\n 6- pesquisar \n");
         printf("\n 7- excluir meio \n");
+        printf("\n 8- Organizar \n");
         printf("\n 0- sair \n");
         printf("Digite: ");
         scanf("%d", &op);
@@ -487,7 +519,9 @@ int main(){
         case 8:
             printf("ORDENA\n");
             
-            lista = excluirMenor(lista);
+            listaOrganizada = ordenar(lista, listaOrganizada);
+            printf("\nLista organizada\n");
+            exibir(listaOrganizada);
             break;
 
         default:
