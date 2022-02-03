@@ -323,8 +323,16 @@ tipoLista excluirMeio(int valor, tipoLista lista){
                     listaAux->anterior = NULL;
                     return listaAux;            
                 }
-                else{
+                else if (listaAux->proximo == NULL && listaAux->anterior != NULL){
                     printf("\nRemove direita\n");
+                    
+                    listaAux2 = listaAux;
+                    listaAux->anterior->proximo = NULL;
+                    listaAux2->anterior = NULL;
+                    free(listaAux2);
+                    listaAux2 = NULL;
+
+                    return lista;
                     
                 }
                 
