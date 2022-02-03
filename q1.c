@@ -304,9 +304,14 @@ tipoLista removerDireita(tipoLista lista){
 
 }
 tipoLista excluirMeio(int valor, tipoLista lista){
-    
+    int flag = 0;
     if (lista == NULL){
         printf("Lista vazia");
+    }
+    else if (lista->anterior == NULL && lista->proximo == NULL){
+        free(lista);
+        lista = NULL;
+        return lista;
     }
     else{
 
@@ -316,24 +321,45 @@ tipoLista excluirMeio(int valor, tipoLista lista){
             
             
             if (listaAux->dado == valor){
-                listaAux2 = listaAux->anterior;
-                listaAux = listaAux->proximo;
-                listaAux2->proximo = listaAux;
                 
-                return lista;
+                if (listaAux->proximo != NULL && listaAux->anterior != NULL){
+                    listaAux2 = listaAux->anterior;
+                    listaAux = listaAux->proximo;
+                    listaAux2->proximo = listaAux;
+                    listaAux->anterior = listaAux2;
+                }
+                else if (listaAux->proximo != NULL && listaAux->anterior == NULL){
+                    printf("\nRemove esquerda\n");
+                    
+                    listaAux = listaAux->proximo;
+                    listaAux->anterior = NULL;
+                    return listaAux;            
+                }
+                else if (listaAux->proximo == NULL && listaAux->anterior != NULL){
+                    printf("\nRemove direita\n");
+                    
+                    listaAux2 = listaAux;
+                    listaAux->anterior->proximo = NULL;
+                    listaAux2->anterior = NULL;
+                    free(listaAux2);
+                    listaAux2 = NULL;
 
+                    return lista;
+                    
+                }
+                
             }
             
             listaAux = listaAux->proximo;
             
         }
-        free(listaAux);
-        listaAux = NULL;
+        return lista;
         free(listaAux2);
         listaAux2 = NULL;
-
+        free(listaAux);
+        listaAux = NULL;
+        
     }
- 
 
 }
 
